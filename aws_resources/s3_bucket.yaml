@@ -1,0 +1,27 @@
+apiVersion: s3.aws.upbound.io/v1beta2
+kind: Bucket
+metadata: 
+  # name of the bucket
+  name: nabeel-crossplane-bucket
+  labels:
+    # label to use used for referencing S3 bucket
+    testing.upbound.io/example-name: s3
+spec:
+  forProvider:
+    region: eu-west-2
+    # extra tags
+    tags:
+      foo: bar
+---
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketOwnershipControls
+metadata:
+  name: nabeel-crossplane-bucket
+spec:
+  forProvider:
+    bucketSelector:
+      matchLabels:
+        testing.upbound.io/example-name: s3
+    region: eu-west-2
+    rule:
+      - objectOwnership: BucketOwnerPreferred
